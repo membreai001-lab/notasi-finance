@@ -1,0 +1,256 @@
+import { Account, Transaction, Budget, SavingsGoal, AppSettings } from '../types/finance';
+import { getCurrentPeriod, getTodayString } from './formatters';
+
+export const INITIAL_ACCOUNTS: Account[] = [
+  {
+    id: 'acc_cash',
+    name: 'Dompet Fisik (Tunai)',
+    type: 'cash',
+    balance: 750000,
+    currency: 'IDR',
+    color: '#10B981',
+    institution: 'Dompet Pribadi',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'acc_bca',
+    name: 'BCA Tahapan Utama',
+    type: 'bank',
+    balance: 8450000,
+    currency: 'IDR',
+    color: '#3B82F6',
+    accountNumber: '8820••••12',
+    institution: 'Bank BCA',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'acc_jago',
+    name: 'Bank Jago (Kantong Harian)',
+    type: 'bank',
+    balance: 2150000,
+    currency: 'IDR',
+    color: '#F59E0B',
+    accountNumber: '1029••••89',
+    institution: 'Bank Jago',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'acc_gopay',
+    name: 'GoPay / OVO Wallet',
+    type: 'ewallet',
+    balance: 420000,
+    currency: 'IDR',
+    color: '#06B6D4',
+    institution: 'GoPay',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'acc_bibit',
+    name: 'Portofolio Bibit & Saham',
+    type: 'investment',
+    balance: 15800000,
+    currency: 'IDR',
+    color: '#8B5CF6',
+    institution: 'Bibit Reksadana',
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+export function getInitialTransactions(): Transaction[] {
+  const today = getTodayString();
+  const [year, month] = today.split('-');
+  
+  // Create transactions spread throughout current month
+  const d = (day: number) => `${year}-${month}-${String(day).padStart(2, '0')}`;
+
+  return [
+    {
+      id: 'tx_1',
+      type: 'income',
+      amount: 14500000,
+      currency: 'IDR',
+      accountId: 'acc_bca',
+      category: 'Gaji Utama',
+      date: d(1),
+      note: 'Gaji Bulanan PT Digital Ventura',
+      tags: ['gaji', 'tetap'],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'tx_2',
+      type: 'expense',
+      amount: 2200000,
+      currency: 'IDR',
+      accountId: 'acc_bca',
+      category: 'Tempat Tinggal & Kos',
+      date: d(2),
+      note: 'Sewa Apartemen / Kos Bulanan',
+      tags: ['rutin', 'tempat-tinggal'],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'tx_3',
+      type: 'transfer',
+      amount: 1500000,
+      currency: 'IDR',
+      accountId: 'acc_bca',
+      toAccountId: 'acc_bibit',
+      category: 'Investasi & Dividen',
+      date: d(3),
+      note: 'Top Up Rutin Reksadana Indeks',
+      tags: ['investasi'],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'tx_4',
+      type: 'expense',
+      amount: 350000,
+      currency: 'IDR',
+      accountId: 'acc_gopay',
+      category: 'Tagihan & Langganan',
+      date: d(4),
+      note: 'WiFi Indihome & Spotify Family',
+      tags: ['utilitas', 'langganan'],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'tx_5',
+      type: 'expense',
+      amount: 95000,
+      currency: 'IDR',
+      accountId: 'acc_gopay',
+      category: 'Makanan & Minuman',
+      date: d(5),
+      note: 'Makan siang Kopi Tuku & Nasi Padang',
+      tags: ['kuliner'],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'tx_6',
+      type: 'expense',
+      amount: 180000,
+      currency: 'IDR',
+      accountId: 'acc_jago',
+      category: 'Transportasi & Bensin',
+      date: d(6),
+      note: 'Bensin Pertamax & Top-up e-Toll',
+      tags: ['transportasi'],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'tx_7',
+      type: 'income',
+      amount: 3200000,
+      currency: 'IDR',
+      accountId: 'acc_bca',
+      category: 'Freelance & Proyek',
+      date: d(7),
+      note: 'Desain UI Dashboard Klien Singapura',
+      tags: ['freelance', 'desain'],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'tx_8',
+      type: 'expense',
+      amount: 450000,
+      currency: 'IDR',
+      accountId: 'acc_bca',
+      category: 'Belanja & Kebutuhan',
+      date: d(8),
+      note: 'Belanja Mingguan Supermarket Papaya',
+      tags: ['kebutuhan-pokok'],
+      createdAt: new Date().toISOString(),
+    },
+  ];
+}
+
+export function getInitialBudgets(): Budget[] {
+  const period = getCurrentPeriod();
+  return [
+    {
+      id: 'bg_makan',
+      category: 'Makanan & Minuman',
+      monthlyLimit: 2500000,
+      period,
+      alertThreshold: 0.8,
+    },
+    {
+      id: 'bg_transport',
+      category: 'Transportasi & Bensin',
+      monthlyLimit: 1000000,
+      period,
+      alertThreshold: 0.8,
+    },
+    {
+      id: 'bg_tempat_tinggal',
+      category: 'Tempat Tinggal & Kos',
+      monthlyLimit: 2500000,
+      period,
+      alertThreshold: 0.9,
+    },
+    {
+      id: 'bg_belanja',
+      category: 'Belanja & Kebutuhan',
+      monthlyLimit: 1500000,
+      period,
+      alertThreshold: 0.85,
+    },
+    {
+      id: 'bg_tagihan',
+      category: 'Tagihan & Langganan',
+      monthlyLimit: 600000,
+      period,
+      alertThreshold: 0.8,
+    },
+    {
+      id: 'bg_hiburan',
+      category: 'Hiburan & Liburan',
+      monthlyLimit: 1000000,
+      period,
+      alertThreshold: 0.8,
+    },
+  ];
+}
+
+export const INITIAL_SAVINGS_GOALS: SavingsGoal[] = [
+  {
+    id: 'goal_darurat',
+    title: 'Dana Darurat 6 Bulan',
+    targetAmount: 30000000,
+    currentAmount: 18500000,
+    targetDate: '2027-06-30',
+    category: 'Keamanan Finansial',
+    color: '#10B981',
+    icon: 'Shield',
+    isCompleted: false,
+  },
+  {
+    id: 'goal_macbook',
+    title: 'MacBook Pro M-Series Baru',
+    targetAmount: 25000000,
+    currentAmount: 16000000,
+    targetDate: '2027-02-15',
+    category: 'Perangkat Kerja',
+    color: '#3B82F6',
+    icon: 'Laptop',
+    isCompleted: false,
+  },
+  {
+    id: 'goal_liburan',
+    title: 'Trip Liburan Jepang / Bali',
+    targetAmount: 15000000,
+    currentAmount: 7500000,
+    targetDate: '2027-11-20',
+    category: 'Liburan',
+    color: '#F59E0B',
+    icon: 'Plane',
+    isCompleted: false,
+  },
+];
+
+export const INITIAL_SETTINGS: AppSettings = {
+  currency: 'IDR',
+  theme: 'dark',
+  userName: 'Teman Notasi',
+  dateFormat: 'D MMMM YYYY',
+};
