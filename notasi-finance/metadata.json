@@ -1,6 +1,0 @@
-{
-  "name": "Notasi Finance",
-  "description": "Aplikasi catatan keuangan pribadi ala Notion dengan multi-dompet, anggaran, analitik arus kas, mode gelap elegan, dan sinkronisasi data antar perangkat.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
